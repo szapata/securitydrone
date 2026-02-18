@@ -10,22 +10,22 @@
     "tracking_timeout_seconds": 300.0,
     "scan_timeout_seconds": 120.0
   },
+  "flight": {
+    "adapter": "mavlink",
+    "connection": "/dev/ttyAMA0",
+    "baud_rate": 921600
+  },
   "detection": {
     "confidence_threshold": 0.6,
-    "model_backend": "stub",
+    "model_backend": "yolo",
     "model_path": "yolov8n.pt"
   },
   "reporting": {
     "transport": "log",
-    "http_endpoint": "http://localhost:8080/api/reports",
+    "http_endpoint": "http://your-platform-server:8080/api/reports",
     "api_key": "",
     "report_interval": 1.0,
     "buffer_size": 100
-  },
-  "flight": {
-    "adapter": "simulated",
-    "connection": "/dev/ttyACM0",
-    "baud_rate": 57600
   },
   "triggers": {
     "http_port": 8000

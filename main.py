@@ -6,6 +6,7 @@ from pathlib import Path
 
 from src.core.drone_controller import DroneController, DroneConfig
 from src.core.flight_adapter import SimulatedFlightAdapter
+from src.core.mavlink_adapter import MAVLinkAdapter
 from src.triggers.wake_up import WakeUpManager
 from src.vision.detector import SuspectDetector, YOLOInferenceBackend
 from src.reporting.reporter import CoordinateReporter, LogTransport, HttpTransport
@@ -57,7 +58,16 @@ def build_system(config: dict) -> SecurityMission:
         scan_timeout_seconds=drone_cfg.get("scan_timeout_seconds", 120.0),
     )
 
-    flight_adapter = SimulatedFlightAdapter()
+    flight_cfg = config.get("flight", {})
+    adapter_type = flight_cfg.get("adapter", "simulated")
+    if adapter_type == "mavlink":
+        flight_adapter = MAVLinkAdapter(
+            connection_string=flight_cfg.get("connection", "/dev/ttyACM0"),
+            baud_rate=flight_cfg.get("baud_rate", 57600),
+        )
+    else:
+        flight_adapter = SimulatedFlightAdapter()
+
     drone = DroneController(config=drone_config, flight_adapter=flight_adapter)
 
     backend_type = detection_cfg.get("model_backend", "stub")

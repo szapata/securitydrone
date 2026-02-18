@@ -1,1 +1,2 @@
 aiohttp>=3.9.0
+pymavlink>=2.4.0
